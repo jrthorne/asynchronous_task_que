@@ -8,7 +8,6 @@ from django.utils.timezone import localtime, now, activate
 
 from common.helpers import TaskStatusEnum
 from common.models import QueuedTask, CronTask
-from common.utils import get_last_day
 
 QUE_LOOP_MINS = 5 # You should call this job every QUE_LOOP_MINS in crontab
 
