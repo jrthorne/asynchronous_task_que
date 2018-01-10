@@ -10,6 +10,7 @@ from common.helpers import TaskStatusEnum
 from common.models import QueuedTask, CronTask
 
 QUE_LOOP_MINS = 5 # You should call this job every QUE_LOOP_MINS in crontab
+MINIMUM_RUN_INTERVAL = 15 # This many minutes must pass before running the task again
 
 class Command(BaseCommand):
 
@@ -22,12 +23,12 @@ class Command(BaseCommand):
             cjminute = cj.minute or 0
             chron_run_after = dt.time(hour=cj.hour, minute=cjminute)
             chron_run_before = (dt.datetime.combine(dt.date(1,1,1),chron_run_after) + dt.timedelta(minutes=QUE_LOOP_MINS+1)).time()
-            has_already_run = dt.datetime.now() - dt.timedelta(minutes=QUE_LOOP_MINS+1) 
+            has_already_run = dt.datetime.now() - dt.timedelta(minutes=MINIMUM_RUN_INTERVAL+1) 
             
             # Don't duplicate a chron added pending task on the queue
             cron_task_exists = QueuedTask.objects \
                .filter(crontask=cj) \
-               .filter(Q(status=TaskStatusEnum.PENDING) | Q(status=TaskStatusEnum.RUNNING) | Q(last_modified__gte=has_already_run)) \
+               .filter(Q(status=TaskStatusEnum.PENDING) | Q(status=TaskStatusEnum.RUNNING) | Q(created_on__gte=has_already_run)) \
                .exists()
             if (cj.day_of_month != None and hrn.day != cj.day_of_month) or \
                (cj.day_of_week != None and hrn.weekday() != cj.day_of_week) or \
