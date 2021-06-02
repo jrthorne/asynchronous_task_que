@@ -30,7 +30,7 @@ Log in to the container, so first:
 
 to get the container id of the running container, then
 
-`$ docker exec -it <CONTAINER ID> bas`h
+`$ docker exec -it <CONTAINER ID> bash`
 
 You can look at root's crontab which should have the que runner, and the cron sheduler:
 
@@ -39,6 +39,7 @@ You can look at root's crontab which should have the que runner, and the cron sh
 `*/1 * * * * /usr/local/bin/python /app/manage.py queue_cron_tasks >> /dev/null 2>&1`
 
 Then when in a bash shell on the running container
+
 `root$ /.manage.py test`
 
 To make sure things are working, then:
@@ -54,6 +55,7 @@ to create the super user of your choice, eg 'admin' with 'password'. And finally
 `root$ runserver`
 
 Go to your browser:
+
 http://localhost:8000/admin/
 
 Log in as the user you crated (admin/password?), and go to 
