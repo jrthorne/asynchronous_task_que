@@ -22,11 +22,12 @@ I have created a docker container that makes it pretty easy to set up and see th
 
 `$ docker-compose build`
 
-``$ docker-compose up`
+`$ docker-compose up`
 
 Log in to the container, so first:
 
 `$ docker ps`
+
 to get the container id of the running container, then
 
 `$ docker exec -it <CONTAINER ID> bas`h
