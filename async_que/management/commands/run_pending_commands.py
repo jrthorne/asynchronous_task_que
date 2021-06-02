@@ -62,12 +62,12 @@ class Command(BaseCommand):
             if command and (command.blocking_email_sent == None or command.blocking_email_sent < one_day_ago):
                 # This is blocking the queue. Send an email once per day
                 from_address = settings.SERVER_EMAIL
-                to = settings.MANAGERS
+                to = settings.SERVER_EMAIL
 
                 if len(to) > 0:
                     try:
                         rptmsg = 'QUEUED TASK STUCK RUNNING BLOCKING QUEUE: %s' % command.command 
-                        msg = EmailMessage(to=to, from_email='IntroTravel Backend <%s>' % from_address, body=rptmsg,
+                        msg = EmailMessage(to=to, from_email='Backend <%s>' % from_address, body=rptmsg,
                             subject="ERROR: AUTO_MANAGEMENT_COMMAND")
                         c = msg.send()
                         print(c)
@@ -105,12 +105,12 @@ class Command(BaseCommand):
 
         if command.status == TaskStatusEnum.FAILED:
             from_address = settings.SERVER_EMAIL
-            to = settings.MANAGERS
+            to = settings.SERVER_EMAIL
 
             if len(to) > 0:
                 try:
                     rptmsg = 'ERROR RUNNING QUEUED TASK: %s' % command.command 
-                    msg = EmailMessage(to=to, from_email='IntroTravel Backend <%s>' % from_address, body=rptmsg,
+                    msg = EmailMessage(to=to, from_email='Backend <%s>' % from_address, body=rptmsg,
                         subject="ERROR: AUTO_MANAGEMENT_COMMAND")
                     c = msg.send()
                     print(c)
