@@ -113,5 +113,5 @@ QUEUED_TASK_RETRIES = 2
 QUEUED_TASK_TIMEOUT = 300 # five minutes
 QUEUED_TASK_WAIT_BETWEEN_RETRIES = 300 # five minutes
 # NOTE: YOU MUST SET THIS TO YOUR VIRTUALENV's PYTHON
-PYTHON_COMMAND = '/home/jason/.virtualenvs/chron/bin/python'
+PYTHON_COMMAND = '/usr/local/bin/python'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

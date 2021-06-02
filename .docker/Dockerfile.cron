@@ -1,0 +1,22 @@
+FROM python:3.7-slim
+# OS stuff
+RUN apt-get update 
+RUN apt-get install dialog apt-utils -y -q
+RUN apt-get install -y -q less vim cron wget 
+RUN apt-get install -y -q default-libmysqlclient-dev
+RUN apt-get install -y -q build-essential libssl-dev libffi-dev libpcre3-dev pkg-config
+RUN apt-get install -y -q libpq-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+RUN apt-get install -y python3-pip
+RUN /usr/local/bin/python -m pip install --upgrade pip
+RUN /usr/local/bin/python -m pip install ipdb
+
+# Application stuff
+RUN mkdir /app
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+# The cron server does not need to serve web pages EXPOSE 8080
+
+# Django cron
+COPY .docker/crontab /root/crontab
+CMD ["./.docker/start_cron.sh"]

@@ -1,25 +1,25 @@
+from .mixins import ProtectedAdminMixin
+from .models import QueuedTask, CronTask, Event
 from django.contrib import admin
 
-from .models import QueuedTask, CronTask
+@admin.register(Event)
+class EventAdmin(ProtectedAdminMixin, admin.ModelAdmin):
+    list_display = ('created', 'summary', 'event_type', 'logged_in', 'ip_address')
+    list_filter = ('event_type', 'show')
+    search_fields = ('extra_detail', 'summary', 'ip_address')
+    list_filter = ('event_type', 'show')
+    list_per_page = 80
+
 
 class QueuedTaskAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'command', 'status', 'created_on', 'last_modified', 'crontask', 'staff_member')
+    list_display = ('id', 'command', 'status', 'created', 'modified', 'crontask', 'staff_member')
     search_fields = ('command', 'id')
     list_filter = ('status',)
-    readonly_fields = ('staff_member', 'blocking_email_sent',
-                       'stdout', 'stderr')
+    list_editable = ('status', )
+    readonly_fields = ('staff_member', 'stdout', 'stderr')
 
     actions = ['run_command_immediately']
-
-    """
-    def get_actions(self, request):
-        actions = super(QueuedTasksdmin, self).get_actions(request)
-        env = os.environ.get('CRONS_GROUP', None)
-        if env == 'production':
-            del actions['run_command_immediately']
-        return actions
-    """
 
     def run_command_immediately(self, request, queryset):
         for command in queryset:

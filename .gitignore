@@ -1,4 +1,4 @@
-**/fixtures
+db.sqlite3
 local.py
 media
 *.sublime-*

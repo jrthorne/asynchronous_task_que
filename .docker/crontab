@@ -1,0 +1,2 @@
+*/5 * * * * /usr/local/bin/python /app/manage.py run_pending_commands >> /dev/null 2>&1
+*/1 * * * * /usr/local/bin/python /app/manage.py queue_cron_tasks >> /dev/null 2>&1

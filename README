@@ -1,0 +1,3 @@
+NOTE:
+crontab file must have a newline before EOF
+Shell scripts in .docker/ must have execute access

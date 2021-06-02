@@ -1,17 +1,15 @@
+from async_que.helpers import TaskStatusEnum
+from async_que.models import QueuedTask
 import datetime
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.core.management import BaseCommand, call_command
+from django.utils import timezone
 import multiprocessing
 import subprocess
 import sys
 import threading
 import time
-
-from django.conf import settings
-from django.core.mail import EmailMessage
-from django.core.management import BaseCommand, call_command
-from django.utils import timezone
-
-from async_que.helpers import TaskStatusEnum
-from async_que.models import QueuedTask
 
 OPTION_COMMAND = "command"
 ONE_HOUR = datetime.timedelta(hours=1)
@@ -58,7 +56,7 @@ class Command(BaseCommand):
         queued_tasks = QueuedTask.objects.filter(status=TaskStatusEnum.RUNNING)
         if queued_tasks.count() > 0:
             a_while_ago = timezone.now() - ONE_HOUR
-            running_too_long = queued_tasks.filter(created_on__lte=a_while_ago)
+            running_too_long = queued_tasks.filter(created__lte=a_while_ago)
             command = running_too_long.first()
             one_day_ago = timezone.now() - datetime.timedelta(days=1)
             if command and (command.blocking_email_sent == None or command.blocking_email_sent < one_day_ago):
@@ -80,7 +78,7 @@ class Command(BaseCommand):
                 command.save()
             return
 
-        command = QueuedTask.objects.filter(status=TaskStatusEnum.PENDING).order_by('created_on').first()
+        command = QueuedTask.objects.filter(status=TaskStatusEnum.PENDING).order_by('created').first()
 
         if not command:
             return

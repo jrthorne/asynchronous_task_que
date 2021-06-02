@@ -1,13 +1,11 @@
+from async_que.helpers import TaskStatusEnum
+from async_que.models import QueuedTask, CronTask
 import datetime as dt
-import pytz
-
 from django.conf import settings
 from django.core.management import BaseCommand
 from django.db.models import Q
 from django.utils.timezone import localtime, now, activate
-
-from common.helpers import TaskStatusEnum
-from common.models import QueuedTask, CronTask
+import pytz
 
 QUE_LOOP_MINS = 5 # You should call this job every QUE_LOOP_MINS in crontab
 MINIMUM_RUN_INTERVAL = 15 # This many minutes must pass before running the task again

@@ -1,0 +1,13 @@
+alias upptest='/usr/local/bin/python /app/manage.py test --settings=uppley.settings.tests'
+alias chowner='chown -R 1000:1000 /app/*'
+alias findnonode='/usr/bin/find . ! -path "*/node_modules/*"'
+alias runserver='./manage.py runserver --insecure 0.0.0.0:8000'
+alias findtf='findnonode -type f -exec grep -Il "" {} \;'
+function textsearch() { findtf | xargs grep -n  "$@" 2>&1 | grep -v "No such" | grep -v node_modules | cut -c 1-200;}
+function itextsearch() { findtf | xargs grep -in  "$@" 2>&1 | grep -v "No such" | grep -v node_modules | cut -c 1-200;}
+function search() { findnonode -name "*.$1" -type f | xargs grep -n  "$2" 2>&1 | grep -v "No such" | grep -v node_modules | cut -c 1-200; }
+function Asearch() { findnonode -name "*.$1" -type f | xargs grep -n -A 2 "$2" 2>&1 | grep -v "No such" | grep -v node_modules | cut -c 1-200; }
+function isearch() { findnonode -name "*.$1" -type f | xargs grep -in  "$2" 2>&1 | grep -v "No such" | grep -v node_modules | cut -c 1-200; }
+alias raamig='findnonode -name "*.pyc" -delete; python manage.py migrate'
+alias raamakemig='findnonode -name "*.pyc" -delete; python manage.py makemigrations'
+alias raaschema='./manage.py generateschema --settings=uppley.settings.swaggar > common/templates/common/schema.yml'
