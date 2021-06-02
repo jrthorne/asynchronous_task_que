@@ -20,7 +20,7 @@ Postgres is a much better place to store logs in my understanding, and django ad
 
 I have created a docker container that makes it pretty easy to set up and see the project working. It creates a server with the cron tasks installed and starts the cron server. Once the docker container is built and running, you have to log in, run migrations, create a superuser and run the django webserver. I could automate this, but have left it as an exercise to aid illustration on how the project is set up, and so you get a chance to see the console logs as it is running. Here is what to do:
 
-`$ docker-compose build``
+`$ docker-compose build`
 
 ``$ docker-compose up`
 
