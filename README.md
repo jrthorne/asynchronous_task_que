@@ -20,30 +20,31 @@ Postgres is a much better place to store logs in my understanding, and django ad
 
 I have created a docker container that makes it pretty easy to set up and see the project working. It creates a server with the cron tasks installed and starts the cron server. Once the docker container is built and running, you have to log in, run migrations, create a superuser and run the django webserver. I could automate this, but have left it as an exercise to aid illustration on how the project is set up, and so you get a chance to see the console logs as it is running. Here is what to do:
 
-$ docker-compose build
-$ docker-compose up
+`$ docker-compose build`
+`$ docker-compose up`
 
 Log in to the container, so first:
-$ docker ps
+`$ docker ps`
 to get the container id of the running container, then
-$ docker exec -it <CONTAINER ID> bash
+`$ docker exec -it <CONTAINER ID> bas`h
 
 You can look at root's crontab which should have the que runner, and the cron sheduler:
-`*/5 * * * * /usr/local/bin/python /app/manage.py run_pending_commands >> /dev/null 2>&1
-*/1 * * * * /usr/local/bin/python /app/manage.py queue_cron_tasks >> /dev/null 2>&1`
+`*/5 * * * * /usr/local/bin/python /app/manage.py run_pending_commands >> /dev/null 2>&1`
+
+`*/1 * * * * /usr/local/bin/python /app/manage.py queue_cron_tasks >> /dev/null 2>&1`
 
 Then when in a bash shell on the running container
-root$ /.manage.py test
+`root$ /.manage.py test`
 
 To make sure things are working, then:
 
-root$ raamig
+`root$ raamig`
 
 Which runs migrations via an alias in the .bash_aliases file, then
 
-root$ ./manage.py createsuperuser
+`root$ ./manage.py createsuperuser`
 to create the super user of your choice, eg 'admin' with 'password'. And finally
-root$ runserver
+`root$ runserver`
 
 Go to your browser:
 http://localhost:8000/admin/
@@ -55,7 +56,7 @@ and it will have run. Open the detail, and see the standard out and standard err
 command records an event log. Check it here:
 http://localhost:8000/admin/async_que/event/
 
-
 NOTES:
-crontab file must have a newline before EOF
-Shell scripts in .docker/ must have execute access
+
+- crontab file must have a newline before EOF
+- Shell scripts in .docker/ must have execute access
