@@ -20,15 +20,19 @@ Postgres is a much better place to store logs in my understanding, and django ad
 
 I have created a docker container that makes it pretty easy to set up and see the project working. It creates a server with the cron tasks installed and starts the cron server. Once the docker container is built and running, you have to log in, run migrations, create a superuser and run the django webserver. I could automate this, but have left it as an exercise to aid illustration on how the project is set up, and so you get a chance to see the console logs as it is running. Here is what to do:
 
-`$ docker-compose build`
-`$ docker-compose up`
+`$ docker-compose build``
+
+``$ docker-compose up`
 
 Log in to the container, so first:
+
 `$ docker ps`
 to get the container id of the running container, then
+
 `$ docker exec -it <CONTAINER ID> bas`h
 
 You can look at root's crontab which should have the que runner, and the cron sheduler:
+
 `*/5 * * * * /usr/local/bin/python /app/manage.py run_pending_commands >> /dev/null 2>&1`
 
 `*/1 * * * * /usr/local/bin/python /app/manage.py queue_cron_tasks >> /dev/null 2>&1`
@@ -43,17 +47,22 @@ To make sure things are working, then:
 Which runs migrations via an alias in the .bash_aliases file, then
 
 `root$ ./manage.py createsuperuser`
+
 to create the super user of your choice, eg 'admin' with 'password'. And finally
+
 `root$ runserver`
 
 Go to your browser:
 http://localhost:8000/admin/
 
-log in as the user you crated (admin/password?), and go to 
+Log in as the user you crated (admin/password?), and go to 
+
 http://localhost:8000/admin/async_que/queuedtask/
+
 Add a task with command 'test_mgt_com' and save it. It will appear as pending. Wait five minutes (the queue runner runs every five minutes),
 and it will have run. Open the detail, and see the standard out and standard error. The management 
 command records an event log. Check it here:
+
 http://localhost:8000/admin/async_que/event/
 
 NOTES:
